@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html ng-app="calendarApp">
+<head>
+    <title>Calendar</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="./js/calendarScript.js"></script>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #bbb;
+        }
+        .main {
+            display: flex;
+            flex: 1;
+        }
+        .sidebar {
+            width: 300px;
+            padding: 10px;
+            border-right: 1px solid #bbb;
+        }
+        .content {
+            flex: 1;
+            padding: 10px;
+            position: relative;
+        }
+        .calendar {
+            width: 100%;
+            height: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        .calendar th, .calendar td {
+            border: 1px solid #bbb;
+            width: 14.28%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .calendar th {
+            background-color: #f1f1f1;
+            cursor: default;
+            text-align: center;
+        }
+        .calendar td {
+            cursor: pointer;
+            height: 20%;
+            vertical-align: top;
+            overflow: auto;
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.25);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        .overlay-content {
+            background-color: #fff;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 1000px;
+            padding: 25px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .overlay-column {
+            width: 50%;
+        }
+        .overlay-column div {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body ng-controller="CalendarController">
+    <div class="container">
+        <div class="header">
+            <button ng-click="prevMonth()">&#9664;</button>
+            <h2>{{ monthNames[currentMonth - 1] }} {{ currentYear }}</h2>
+            <button ng-click="nextMonth()">&#9654;</button>
+        </div>
+        <div class="main">
+            <div class="sidebar">
+                <h3>Selected Date: {{ selectedDate }}</h3>
+                <div>
+                    <h4>Add Task</h4>
+                    <input type="text" ng-model="newTask" placeholder="Enter a task">
+                    <button ng-click="addTask()">Add Task</button>
+                </div>
+                <div>
+                    <h4>Add Note</h4>
+                    <input type="text" ng-model="newNote" placeholder="Enter a note">
+                    <button ng-click="addNote()">Add Note</button>
+                </div>
+                <br>
+                <div>
+                    <button ng-click="logout()">Logout</button>
+                </div>
+                <br>
+                <div ng-show="showOverlay">
+                    <button ng-click="closeOverlay()">Back to calendar</button>
+                </div>
+            </div>            
+            <div class="content">
+                <table class="calendar">
+                    <thead>
+                        <tr>
+                            <th>Sun</th>
+                            <th>Mon</th>
+                            <th>Tue</th>
+                            <th>Wed</th>
+                            <th>Thu</th>
+                            <th>Fri</th>
+                            <th>Sat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="week in weeks">
+                            <td ng-repeat="day in week" ng-click="selectDay(day)" data-date="{{ day.fullDate }}">
+                                {{ day.date }}
+                                <div ng-repeat="task in day.tasks">{{ task.task }}</div>
+                                <div ng-repeat="note in day.notes">{{ note.note }}</div>
+                            </td>                            
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="overlay" ng-show="showOverlay">
+                    <div class="overlay-content">
+                        <div class="overlay-column">
+                            <h3>Tasks</h3>
+                            <div ng-repeat="task in selectedDayTasks" ng-click="deleteTask(task.id)" data-task-id="{{ task.id }}">
+                                {{ task.task }}
+                            </div>
+                        </div>
+                        <div class="overlay-column">
+                            <h3>Notes</h3>
+                            <div ng-repeat="note in selectedDayNotes" ng-click="deleteNote(note.id)" data-note-id="{{ note.id }}">
+                                {{ note.note }}
+                            </div>                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

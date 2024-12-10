@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html ng-app="authApp">
+<head>
+    <title>Login</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="./js/authScript.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: left;
+        }
+
+        form {
+            display: flex;
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        input {
+            padding: 10px;
+            width: 100%;
+            max-width: 350px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        
+        label, input, button {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body ng-controller="LoginController">
+    <div class="container">
+        <h1>Login</h1>
+        <form ng-submit="loginUser(username, password)">
+            <label for="username">Username:</label>
+            <input type="text" ng-model="username" required>
+            <label for="password">Password:</label>
+            <input type="password" ng-model="password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>
