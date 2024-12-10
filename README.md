@@ -13,8 +13,7 @@ dotenv
 express-session
 path
 
-Flowchart
-[Flowchart](docs/flowchart.png)
+[Flowchart](docs/CalendarFlowchart.png)
 
 Endpoints
 User Authentication
